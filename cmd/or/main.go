@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
+
+	"github.com/wmcbtech30/openrouter-cli/internal/subcommands"
 )
 
 func main() {
@@ -17,10 +20,13 @@ func main() {
 	switch os.Args[1] {
 	case "--help", "-h", "help":
 		showHelp()
-		os.Exit(0)
 	case "--version", "-v", "version":
 		showVersion()
-		os.Exit(0)
+	case "chat":
+		if err := subcommands.ChatSubCmdParser(ctx, os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
 	default:
 		// pass the context to the subcommand
 		showHelp()
